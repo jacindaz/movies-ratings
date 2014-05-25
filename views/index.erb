@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title><%= "#{@title}"%></title>
+    <link rel="stylesheet" href="/styles.css">
+<!--     <link rel="stylesheet" href="/bootstrap-responsive.css">
+    <link rel="stylesheet" href="/bootstrap-responsive.min.css">
+    <link rel="text/javascript" href="/bootstrap.js">
+    <link rel="text/javascript" href="/bootstrap.min.js"> -->
+  </head>
+
+  <body>
+
+    <h1 name="top">All the Movies in the history of the world</h1>
+
+      <!--Display an array of hashes of all movies and all information-->
+      <!--<%= @all_movies %>-->
+      <!--<%= @titles_array %>-->
+
+<!--Search bar-->
+      <form action="/movies" method="get">
+        <label for="query">Search: </label>
+        <input type="text" name="query" id="query" />
+        <input type="submit" value="Search" />
+      </form>
+
+
+
+<!--User chooses number of pages to display-->
+<h4>Choose the number of movies to display:</h4>
+<div class="btn-group">
+  <a href="/movies?page=<%= @page_number %>&display=10") %>">
+    <button type="button" class="btn btn-default">10</button>
+  </a>
+  <a href="/movies?page=<%= @page_number %>&display=20") %>">
+    <button type="button" class="btn btn-default">20</button>
+  </a>
+  <a href="/movies?page=<%= @page_number %>&display=30") %>">
+    <button type="button" class="btn btn-default">30</button>
+  </a>
+</div>
+
+<br><br>
+
+
+<!--If there is a search query, only display query results-->
+      <% if @query != nil %>
+        <ul>
+        <% @all_movies.each do |movie_hash| %>
+          <% if movie_hash[:title].include?(@query.to_s) == true %>
+            <li><a href="/movies/<%= movie_hash[:id] %>">
+              <%= movie_hash[:title] %>
+            </a></li>
+          <% elsif (movie_hash[:synopsis] != nil) && (movie_hash[:synopsis].include?(@query.to_s) == true) %>
+            <li><a href="/movies/<%= movie_hash[:id] %>">
+              <%= movie_hash[:title] %>
+            </a></li>
+          <% end %>
+        <% end %>
+        </ul>
+
+<!--If no queries, display movies based on num/pg to display-->
+      <% else %>
+        <ul>
+          <% @movies.each do |movie_hash| %>
+            <li>
+              <a href="<%= url("/movies/#{movie_hash[:id]}") %>">
+                <%= movie_hash[:title] %>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+
+    <p>
+      <a href="/movies?page=<% @page_number - 1 %>&display=<%= @num_movies %>" class="no_underline btn">
+        Previous Page
+      </a>
+      <a href="/movies?page=<%= @page_number + 1 %>&display=<%= @num_movies %>" class="no_underline btn">
+        Next Page
+      </a>
+    </p>
+
+    <a href="../">Back Home</a>
+
+
+  </body>
+
+</html>
+
+
+
